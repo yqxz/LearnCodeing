@@ -4,14 +4,14 @@ import org.tzdr.base.BaseConfig;
 
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.AuthProvider;
 import io.vertx.ext.web.Route;
-import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.AuthHandler;
 import io.vertx.ext.web.handler.BasicAuthHandler;
+import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 
 /**
 * @author 狐妖小红娘
@@ -63,7 +63,6 @@ public class HttpServerUtil {
 		route2.handler(routingContext->{
 			// 所有的请求都会调用这个处理器处理
 			  HttpServerResponse response = routingContext.response();
-			  HttpServerRequest request = routingContext.request();
 			  response.putHeader("content-type", "text/plain");
 			  // 写入响应并结束处理
 			  response.end("Hello World from MAIN_ROUTER!");
@@ -75,7 +74,6 @@ public class HttpServerUtil {
 			// 所有的请求都会调用这个处理器处理
 				System.out.println(Integer.valueOf("sad"));
 			  HttpServerResponse response = routingContext.response();
-			  HttpServerRequest request = routingContext.request();
 			  response.putHeader("content-type", "text/plain");
 			  // 写入响应并结束处理
 			  response.end("Hello World from restAPI");
@@ -92,7 +90,9 @@ public class HttpServerUtil {
 		Route route3 = BaseConfig.restAPI.route("/hello");
 		route3.handler(basicAuthHandler);
 		
-		
+		BaseConfig.restAPI.route("/static/*").handler(StaticHandler.create());
+		BaseConfig.restAPI.route().handler(CorsHandler.create("*"));
+		//CorsHandler  一个已经实现了的跨域资源请求类！而且对预检命令进行了处理
 		//开启服务监听
 		server.requestHandler(BaseConfig.Main_Router).listen(listen->{
 			if (listen.succeeded()) {
