@@ -45,6 +45,13 @@
     <artifactId>vertx-jdbc-client</artifactId>
     <version>3.6.0.CR2</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/io.vertx/vertx-web-client -->
+<dependency>
+    <groupId>io.vertx</groupId>
+    <artifactId>vertx-web-client</artifactId>
+    <version>3.6.0.CR2</version>
+</dependency>
+
   </dependencies>
   <build>
     <finalName>thou</finalName>

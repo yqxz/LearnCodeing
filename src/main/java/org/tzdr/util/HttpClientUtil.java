@@ -35,7 +35,6 @@ public class HttpClientUtil {
 			.setSsl(true)
 			.setVerifyHost(false)
 		    .setTrustAll(true)
-		    .setIdleTimeout(2)
 		   );
 	/**
 	 * 发送一个get请求
@@ -74,7 +73,6 @@ public class HttpClientUtil {
 				});
 			});
 			request.headers().set(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
-			
 			if (params.size()>0) {
 				StringBuilder sb=new StringBuilder();
 				params.forEach((k,v)->{
@@ -105,7 +103,7 @@ public class HttpClientUtil {
 					future.complete(body.toString());
 				});
 			});
-			request.headers().set(HttpHeaders.CONTENT_TYPE, "multipart/form-data;boundary=-----WebKitFormBoundaryX3mHuP4Uhvo8Zy3O");
+			request.headers().set(HttpHeaders.CONTENT_TYPE, "multipart/form-data; boundary=99ca5a7265ab8614").set("user-agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.87 Safari/537.36");
 			InputStream input=new FileInputStream(file);
 			ByteArrayOutputStream bos=new ByteArrayOutputStream();
 			byte[] bs = new byte[1024];  
@@ -117,7 +115,7 @@ public class HttpClientUtil {
 			bos.close();
 			Buffer buffer=Buffer.buffer(bos.toByteArray());
 			request.setChunked(true).write(buffer);
-			request.end(buffer);
+			request.end();
 		} catch (Exception e) {
 			logger.error("请求失败:"+e.getMessage());
 			future.complete(e.getMessage());
@@ -127,7 +125,15 @@ public class HttpClientUtil {
 	
 	public static void main(String[] args) {
 		File file=new File("C:\\Users\\wyf\\Desktop\\如果喜欢的话.jpg");
-		sendFile("http://localhost:5412/mapway/inspection/uav/img/upload", file);
+		//http://localhost:5412/mapway/inspection/uav/img/upload
+		//http://localhost:541/rest/myhandler
+		sendFile("http://localhost:541/rest/myhandler", file).setHandler(res -> {
+			if (res.succeeded()) {
+				System.out.println(res.result());
+			} else {
+				System.out.println(res.cause().getMessage());
+			}
+		});
 	}
 	
 	
