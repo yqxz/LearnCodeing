@@ -101,7 +101,8 @@ public class WebClientUtil {
 	 * 	发送一个POST请求，上传文件
 	 * @param url
 	 * @param file
-	 * @return
+	 * @return			我将这个部署在自己的那台破电脑上的时候！这个sendMultipartForm方法就失败了，然后return都没有！
+	 * 					我很郁闷但是调试也毫无结果,我的电脑少了一些Vert.x的低层实现吗
 	 */
 	public static Future<String> postString(String url,File file) {
 		MultipartForm form=MultipartForm.create();
@@ -288,7 +289,7 @@ public class WebClientUtil {
 	
 	public static void main(String[] args) {
 		String url="http://localhost:541/rest/myhandler";
-		postJson(url, new File("C:\\Users\\Administrator\\Desktop\\test.png")).setHandler(res -> {
+		postJson(url, new File("C:\\Users\\wyf\\Desktop\\如果喜欢的话.jpg")).setHandler(res -> {
 			if (res.succeeded()) {
 				System.out.println(res.result());
 			} else {

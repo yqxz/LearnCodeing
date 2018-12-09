@@ -15,7 +15,8 @@ import io.vertx.ext.web.handler.StaticHandler;
 /**
 * @author 狐妖小红娘
 * @version 创建时间：2018年12月1日 下午11:47:53
-* 类说明	练习Vert.x编写HTTP服务端和客户端
+*	 类说明	练习Vert.x编写HTTP服务端和客户端
+*	很糟糕的联系！还没有想好真正的项目中  我该怎么去用自己的这些封装的东西
 */
 public class HttpServerUtil {
 
