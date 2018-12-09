@@ -1,16 +1,9 @@
 package org.tzdr.util;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
-
-import javax.activation.MimeType;
 import javax.activation.MimetypesFileTypeMap;
-
 import org.tzdr.base.BaseConfig;
-
-import com.sun.activation.registries.MimeTypeFile;
-
 import io.vertx.core.Future;
 import io.vertx.core.MultiMap;
 import io.vertx.core.buffer.Buffer;
@@ -30,8 +23,11 @@ public class WebClientUtil {
 	/**
 	 * 	歌名<故梦>   想看鲁迅的两地书
 	 * 	闲言碎语！下面的实现大多可以编写为流式的API，不过为了过程更清晰，易于理解每一步干了什么，暂时用这种方式实现！
-	 * 	不知道，流式的API和这样的分布书写运行起来有什么区别！实现的速度不一样还是
+	 * 	不知道，流式的API和这样的分步书写运行起来有什么区别！实现的速度不一样还是
 	 * 	注意每一步流式操作执行后的结果是什么
+	 * 	喜欢神之血吗？还是喜欢人呢  like  god  like man   like  you always
+	 * 	怎么样的憧憬是你一直想去保持的呢！我们在字里行间怎么可能看得出来   如果你不说的话
+	 * 	
 	 */
 	
 	/**
@@ -109,17 +105,17 @@ public class WebClientUtil {
 	 */
 	public static Future<String> postString(String url,File file) {
 		MultipartForm form=MultipartForm.create();
-		//除了文件的绝对路径，其他的参数都不是必须的！但是不能为null
+		//除了文件的绝对路径，其他的参数都不是必须的！但是不能为null    但是加了这个方法容易跑不通！不知道为什么，我现在这个电脑的问题
 		form.binaryFileUpload(file.getName(), file.getName(), file.getAbsolutePath(), new MimetypesFileTypeMap().getContentType(file));
 		Future<String> future=Future.future();
 		HttpRequest<Buffer> request = webClient.postAbs(url);
-		request.sendMultipartForm(form,ar -> {
-			if (ar.succeeded()) {
-				future.complete(ar.result().body().toString());
-			} else {
-				future.fail("发送post请求"+url+"失败::"+ar.cause().getMessage());
-			}
-		});
+			request.sendMultipartForm(form,ar -> {
+				if (ar.succeeded()) {
+					future.complete(ar.result().body().toString());
+				} else {
+					future.fail("发送post请求"+url+"失败::"+ar.cause().getMessage());
+				}
+			});
 		return future;
 	}
 	
@@ -279,7 +275,8 @@ public class WebClientUtil {
 		form.binaryFileUpload(file.getName(), file.getName(), file.getAbsolutePath(), new MimetypesFileTypeMap().getContentType(file));
 		Future<JsonObject> future=Future.future();
 		HttpRequest<Buffer> request = webClient.postAbs(url);
-		request.as(BodyCodec.jsonObject()).sendMultipartForm(form,ar -> {
+		request.as(BodyCodec.jsonObject())
+			.sendMultipartForm(form,ar -> {
 			if (ar.succeeded()) {
 				future.complete(ar.result().body());
 			} else {
@@ -290,18 +287,14 @@ public class WebClientUtil {
 	}
 	
 	public static void main(String[] args) {
-		MultipartForm form=MultipartForm.create();
 		String url="http://localhost:541/rest/myhandler";
-		MultipartForm upload = form.binaryFileUpload("ig", "如果的话.jpg", "C:\\Users\\wyf\\Desktop\\如果喜欢的话.jpg", "/form-data");
-		
-		postString(url, new File("C:\\Users\\wyf\\Desktop\\如果喜欢的话.jpg")).setHandler(res -> {
+		postJson(url, new File("C:\\Users\\Administrator\\Desktop\\test.png")).setHandler(res -> {
 			if (res.succeeded()) {
 				System.out.println(res.result());
 			} else {
 				System.out.println(res.cause().getMessage());
 			}
 		});
-		
 	}
 	
 	

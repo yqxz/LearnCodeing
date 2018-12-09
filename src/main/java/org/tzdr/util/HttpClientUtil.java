@@ -111,9 +111,9 @@ public class HttpClientUtil {
             while (-1 != (len = input.read(bs))) {
                 bos.write(bs, 0, len);
             }
-            input.close();
-			bos.close();
 			Buffer buffer=Buffer.buffer(bos.toByteArray());
+			 input.close();
+			 bos.close();
 			request.setChunked(true).write(buffer);
 			request.end();
 		} catch (Exception e) {
@@ -124,7 +124,7 @@ public class HttpClientUtil {
 	}
 	
 	public static void main(String[] args) {
-		File file=new File("C:\\Users\\wyf\\Desktop\\如果喜欢的话.jpg");
+		File file=new File("C:\\Users\\Administrator\\Desktop\\test.png");
 		//http://localhost:5412/mapway/inspection/uav/img/upload
 		//http://localhost:541/rest/myhandler
 		sendFile("http://localhost:541/rest/myhandler", file).setHandler(res -> {

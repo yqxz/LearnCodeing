@@ -1,9 +1,4 @@
 package org.tzdr.util;
-/**
-* @author 狐妖小红娘
-* @version 创建时间：2018年12月1日 下午11:48:09
-* 类说明	练习Vert.x的数据库支持
-*/
 
 import java.util.List;
 import org.tzdr.base.BaseConfig;
@@ -16,18 +11,28 @@ import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.SQLConnection;
 import io.vertx.ext.sql.UpdateResult;
 
+/**
+* @author 狐妖小红娘
+* @version 创建时间：2018年12月1日 下午11:48:09
+* 类说明	练习Vert.x的数据库支持,封装了一些简单的操作
+*/
 public class JdbcManager {
 	private JDBCClient jdbc;
 	private static Logger logger=LoggerFactory.getLogger(JdbcManager.class);
 	/**
-	 * 私有构造方法！创建默认jdbc
+	 * 创建默认JdbcManager
 	 * @param jdbcClient
 	 */
 	public JdbcManager(JDBCClient jdbcClient) {
 		if (jdbcClient==null) {
-			this.jdbc=JDBCClient.createShared(BaseConfig.vertx, BaseConfig.DEFAULT_JDBC_CONFIG);
-			if (jdbc!=null) {
-				logger.info("初始化默认JDBC成功");
+			try {
+				this.jdbc=JDBCClient.createShared(BaseConfig.vertx, BaseConfig.Default_Jdbc_Config);
+				if (jdbc!=null) {
+					logger.info("初始化默认JDBC成功");
+				} 
+			} catch (Exception e) {
+				// TODO: handle exception
+				logger.error("初始化默认JDBC失败:"+e.getMessage());
 			}
 			return;
 		}
@@ -107,6 +112,12 @@ public class JdbcManager {
 		return future;
 	}
 	
+	/**
+	 * 执行多条非SELECT语句		用于开启事物的SQL执行，需要自己提供一个SQLConnection连接
+	 * @param sqlStatements
+	 * @param conn
+	 * @return
+	 */
 	public Future<List<Integer>> batch(List<String> sqlStatements,SQLConnection conn) {
 		Future<List<Integer>> future=Future.future();
 		conn.batch(sqlStatements,res->{
@@ -144,6 +155,13 @@ public class JdbcManager {
 		return future;
 	}
 	
+	/**
+	 * 执行多条非select  SQL语句,它们来自一个预编译的SQL语句，但是可以有不同参数
+	 * 用于开启事物的SQL执行，需要自己提供一个SQLConnection连接
+	 * @param sqlStatement	预编译的非select语句
+	 * @param params		一个List<JsonArray>类型的参数
+	 * @return				返回每条语句受影响的行数
+	 */
 	public Future<List<Integer>> batchWithParams(String sqlStatement, List<JsonArray> params,SQLConnection conn) {
 		Future<List<Integer>> future=Future.future();
 		conn.batchWithParams(sqlStatement,params,res->{
@@ -181,6 +199,11 @@ public class JdbcManager {
 		return future;
 	}
 	
+	/**
+	 * 执行一条非select SQL语句		用于开启事物的SQL执行，需要自己提供一个SQLConnection连接
+	 * @param sql
+	 * @return
+	 */
 	public Future<UpdateResult> update(String sql,SQLConnection conn) {
 		Future<UpdateResult> future=Future.future();
 		conn.update(sql,res->{
@@ -219,6 +242,12 @@ public class JdbcManager {
 		return future;
 	}
 	
+	/**
+	 * 执行一条预编译的非select SQL语句
+	 * @param sql
+	 * @param params
+	 * @return
+	 */
 	public Future<UpdateResult> updateWithParams(String sql,JsonArray params,SQLConnection conn) {
 		Future<UpdateResult> future=Future.future();
 		conn.updateWithParams(sql,params,res->{

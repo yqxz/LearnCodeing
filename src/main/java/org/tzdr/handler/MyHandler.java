@@ -11,18 +11,11 @@ import io.vertx.ext.web.RoutingContext;
  */
 public class MyHandler implements Handler<RoutingContext>{
 	
-	
-//	${package_declaration}
-//
-//	/**
-//	 * @author 狐妖小红娘
-//	 * @version ${date} ${time}
-//	 */
-//	${type_declaration}
 
 	@Override
 	public void handle(RoutingContext context) {
 		// TODO Auto-generated method stub
+		System.out.println("MyHandler");
 		context.request().headers().forEach(res ->{
 			System.out.println(res.toString());
 		});
