@@ -6,6 +6,7 @@
 	启动服务             redis-server --service-start
 	停止服务             redis-server --service-stop
 	登录方式:进入工作目录		redis-cli.exe -h 服务器 -p 端口 	-a 密码         如果不使用密码登录的话！会没有权限操作     可以调用   auth命令输入  password
+	启动命令中加入--raw   参数可以让redis客户端显示中文！不然会显示中文的UTF-8编码
 	
 	中文翻译版网址:http://doc.redisfans.com/string/append.html
 	下面只记录一些简单的东西！系统的命令可以去网址自己多次的复习

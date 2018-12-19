@@ -5,12 +5,14 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
+import io.vertx.redis.RedisOptions;
+
 /**
 * @author 狐妖小红娘
 * @version 创建时间：2018年12月1日 下午11:49:39
 * 类说明	一些基础的配置
 */
-import io.vertx.redis.RedisOptions;
 public class BaseConfig {
 	/**
 	 * 每个目录的开头都是一段比较琐碎的话！用来记录一些事情
@@ -70,8 +72,7 @@ public class BaseConfig {
 	 * 	在这里做一些公用的操作,比如跨域请求的设置、所有对静态资源的访问！子路由和主路由是否都需要分别取设置跨域的访问请求
 	 */
 	static {
-		BaseConfig.Main_Router.route().handler(BodyHandler.create());
-		BaseConfig.restAPI.route().handler(BodyHandler.create());
+		BaseConfig.Main_Router.route().handler(CorsHandler.create("*")).handler(BodyHandler.create());
+		BaseConfig.restAPI.route().handler(CorsHandler.create("*")).handler(BodyHandler.create());
 	}
-	
 }

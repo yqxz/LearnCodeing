@@ -97,7 +97,7 @@ public class HttpServerUtil {
 		
 		BaseConfig.restAPI.route().handler(CorsHandler.create("*"));
 		
-		BaseConfig.restAPI.route(HttpMethod.POST,"/myhandler").handler(new MyHandler());
+		BaseConfig.restAPI.route(HttpMethod.GET,"/myhandler").handler(new MyHandler());
 		
 //		BaseConfig.restAPI.route("/myhandler/*").handler(routingContext->{
 //			// 所有的请求都会调用这个处理器处理
@@ -107,7 +107,6 @@ public class HttpServerUtil {
 //		  response.write("I will be end something");
 //		  routingContext.next();
 //		});
-		
 		
 //		BaseConfig.restAPI.route("/myhandler/*").handler(routingContext->{
 //			// 所有的请求都会调用这个处理器处理
